@@ -1,0 +1,60 @@
+.hero-section {
+    min-height: 400px;
+    background: linear-gradient(rgba(0, 31, 63, 0.6), rgba(0, 31, 63, 0.6)), 
+                url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2000') no-repeat center center;
+    background-size: cover;
+    padding: 80px 0;
+}
+
+.custom-input {
+    background-color: #f8f9fa !important;
+    border: 2px solid #e9ecef !important;
+    border-radius: 12px !important;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    color: #002147;
+}
+
+.custom-input:hover {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    cursor: pointer;
+}
+
+.custom-input:focus {
+    background-color: #ffffff !important;
+    border-color: #ff9f43 !important; 
+    box-shadow: 0 0 0 4px rgba(255, 159, 67, 0.1) !important;
+}
+
+.btn-buscar-viajes {
+    background-color: #ff9f43;
+    color: #002147;
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-buscar-viajes:hover {
+    background-color: #f39c12;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 159, 67, 0.3);
+}
+
+.text-navy {
+    color: #002147;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(0.5);
+}

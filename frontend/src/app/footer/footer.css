@@ -1,0 +1,19 @@
+.custom-footer {
+  background-color: #e9ecef;
+  width: 100%;
+}
+
+.text-navy {
+  color: #002147 !important;
+  font-size: 1.1rem;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #6c757d !important;
+}
+
+:host {
+  display: block;
+  margin-top: auto;
+}
