@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eps.modelo.Paciente;
 import eps.modelo.Citas;
+import eps.modelo.Medico;
 
 public interface citas extends JpaRepository<Citas, Long>{
 	
 	List <Citas> findByPaciente(Paciente p);
+	List <Citas> findByMedico(Medico m);
 	
 	@Query(value="SELECT DISTINCT CONCAT(m.nombre, \" \", m.apellido) AS nombre_medicos" 
 			+ " FROM citas c"

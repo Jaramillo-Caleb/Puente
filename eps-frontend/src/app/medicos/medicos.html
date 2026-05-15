@@ -1,10 +1,26 @@
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold text-primary m-0">ESTA ES LA PAGINA DE MEDICOS</h1>
-
-        <button type="button" class="btn btn-primary shadow-sm" (click)="abrirModal()">
-            Agregar Medicos
-        </button>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="fw-bold text-primary m-0">
+            ESTA ES LA PAGINA DE MEDICOS
+        </h1>
+        <div class="d-flex align-items-center gap-3">
+            <div class="input-group shadow-sm" style="width: 320px;">
+                <span class="input-group-text bg-white border-end-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                    </svg>
+                </span>
+                <input type="text" class="form-control border-start-0" placeholder="Buscar paciente..." id="cedula">
+                <button class="btn btn-outline-primary fw-semibold px-4" type="button" (click)="buscar()">
+                    Buscar
+                </button>
+            </div>
+            <button type="button" class="btn btn-primary shadow-sm px-4 fw-semibold" (click)="abrirModal()">
+                Agregar Medicos
+            </button>
+        </div>
     </div>
 
     <div class="contenedor-tabla card shadow border-0">
@@ -16,20 +32,50 @@
                         <th>Nombre</th>
                         <th>Apellidos</th>
                         <th>Especialidad</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody class="text-center">
-                    @for (i of medicos; track i.cedula){
+                    @for (i of datosPaginados(); track i.cedula){
                     <tr>
                         <td>{{i.cedula}}</td>
                         <td>{{i.nombre}}</td>
                         <td>{{i.apellido}}</td>
                         <td>{{i.especialidad}}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" (click)="eliminar(i.cedula)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-success" (click)="actualizarMedico(i)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd"
+                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                </svg>
+                            </button>
+                        </td>
                     </tr>
                     }
                 </tbody>
             </table>
+            <div class="paginacion">
+                <button (click)="cambiarPagina(paginaActual() - 1)" [disabled]="paginaActual() === 1">
+                    < </button>
+
+                        <span>Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
+
+                        <button (click)="cambiarPagina(paginaActual() + 1)"
+                            [disabled]="paginaActual() === totalPaginas()">
+                            >
+                        </button>
+            </div>
         </div>
     </div>
 </div>
@@ -37,32 +83,52 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Nuevo Medico</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()"></button>
+                <h5 class="modal-title">
+                    @if (tipo == 0){
+                    Editar Medico
+                    }@else if (tipo == 1) {
+                    Agregar Medico
+                    }@else if (tipo == 2) {
+                    Detalles del Medico
+                    }
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="cerrarModal()"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Cedula</label>
-                        <input for="inputCedula" type="text" class="form-control" [(ngModel)]="medico.cedula" name="cedula">
+                        <input for="inputCedula" type="text" class="form-control" [(ngModel)]="medico.cedula"
+                            name="cedula">
 
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Nombre</label>
-                        <input for="inputNombre" type="text" class="form-control" [(ngModel)]="medico.nombre" name="nombre">
+                        <input for="inputNombre" type="text" class="form-control" [(ngModel)]="medico.nombre"
+                            name="nombre">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Apellidos</label>
-                        <input for="inputApellidos" type="text" class="form-control" [(ngModel)]="medico.apellido" name="apellidos">
+                        <input for="inputApellidos" type="text" class="form-control" [(ngModel)]="medico.apellido"
+                            name="apellidos">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Especialidad</label>
-                        <input for="inputEspecialidad" type="text" class="form-control" [(ngModel)]="medico.especialidad" name="especialidad">
+                        <input for="inputEspecialidad" type="text" class="form-control" [(ngModel)]="medico.especialidad"
+                            name="especialidad">
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" (click)="cerrarModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" (click)="guardarMedico()">Guardar</button>
-
+                        @if (tipo != 2){
+                        <button type="submit" class="btn btn-primary" (click)="guardarMedico()">
+                            @if (tipo == 1) {
+                            guardar
+                            }@else{
+                            actualizar
+                            }
+                        </button>
+                        }
                     </div>
                 </form>
             </div>

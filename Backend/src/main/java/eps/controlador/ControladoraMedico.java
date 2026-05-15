@@ -1,6 +1,7 @@
 package eps.controlador;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import eps.repositorio.citas;
 import eps.repositorio.medico;
+import eps.modelo.Citas;
 import eps.modelo.Medico;
-import eps.modelo.Paciente;
 
 @RestController
 @RequestMapping("/medico")
@@ -26,19 +28,18 @@ public class ControladoraMedico {
 	@Autowired
 	private medico repositorioMedico;
 	
+	@Autowired
+	private citas repositorioCitas;
+	
 	@GetMapping("listarTodo/")
 	public List<Medico> mostrarTodos(){
 		return repositorioMedico.findAll();
 	}
 	
-	@GetMapping("buscarCC/")
-	public String buscarCC(@RequestParam ("cedula") String cedula) {
-		Medico p = repositorioMedico.findById(cedula).get();
-		if(p!=null) {
-			return "nombre: " + p.getNombre() + "\n" + "apellido: " + p.getApellido() + "\n" + "especialidad: " + p.getEspecialidad() + "\n"  +  "cedula: " + p.getCedula();
-		}else {
-			return "Medico no encontrado";
-		}
+	@PostMapping("buscarCC/")
+	public Medico buscarCC(@RequestBody String cedula) {
+		Medico m = repositorioMedico.findById(cedula).get();
+		return m;
 	}
 	
 	@PostMapping("guardar/")
@@ -47,14 +48,16 @@ public class ControladoraMedico {
 		return ResponseEntity.ok(m);
 	}
 	
-	@DeleteMapping("eliminar/")
-	public String eliminar(@RequestParam ("cedula") String cedula) {
-		if(repositorioMedico.existsById(cedula)) {
-			repositorioMedico.deleteById(cedula);
-			return "Eliminado";
-		}else {
-			return "Medico no encontrado";
+	@PostMapping("eliminar/")
+	public Optional<Medico> eliminar(@RequestBody String cedula) {
+		Medico m = this.repositorioMedico.findById(cedula).get();
+		List<Citas> c = this.repositorioCitas.findByMedico(m);
+		
+		for(int i = 0; i < c.size(); i++) {
+			this.repositorioCitas.deleteById(c.get(i).getNumeroCita());
 		}
+		this.repositorioMedico.deleteById(cedula);
+		return Optional.empty();
 	}
 	
 	@PutMapping("actualizar/")

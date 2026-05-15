@@ -31,14 +31,14 @@
                         <th>Cédula</th>
                         <th>Nombre</th>
                         <th>Apellidos</th>
-                        <th>Sexo</th>
+                        <th>Genero</th>
                         <th>Edad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody class="text-center">
-                    @for (i of pacientes; track i.cedula){
+                    @for (i of datosPaginados(); track i.cedula){
                     <tr>
                         <td>{{i.cedula}}</td>
                         <td>{{i.nombre}}</td>
@@ -67,6 +67,17 @@
                     }
                 </tbody>
             </table>
+            <div class="paginacion">
+                <button (click)="cambiarPagina(paginaActual() - 1)" [disabled]="paginaActual() === 1">
+                    < </button>
+
+                        <span>Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
+
+                        <button (click)="cambiarPagina(paginaActual() + 1)"
+                            [disabled]="paginaActual() === totalPaginas()">
+                            >
+                        </button>
+            </div>
         </div>
     </div>
 </div>

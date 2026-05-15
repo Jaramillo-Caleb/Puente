@@ -35,14 +35,14 @@ public class Citas {
 	
 	@ManyToOne ()
 	@JoinColumn(name="id_medico", referencedColumnName="cc")
-	private Medico id_medico;
+	private Medico medico;
 
 	public Citas(Date fecha, LocalTime hora, String estado, Paciente paciente, Medico medico) {
 		this.fecha = fecha;
 		this.hora = hora;
 		this.estado = estado;
 		this.paciente = paciente;
-		this.id_medico = medico;
+		this.medico = medico;
 	}
 
 	public Citas() {}
@@ -88,10 +88,10 @@ public class Citas {
 	}
 
 	public Medico getId_medico() {
-		return id_medico;
+		return medico;
 	}
 
 	public void setiId_medico(Medico medico) {
-		this.id_medico = medico;
+		this.medico = medico;
 	}
 }

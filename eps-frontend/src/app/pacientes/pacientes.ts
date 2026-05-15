@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { Paciente } from '../entidades/paciente';
 import { PacienteService } from '../servicio/paciente';
 import { isPlatformBrowser } from '@angular/common';
@@ -11,9 +11,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './pacientes.css',
 })
 export class Pacientes {
-  pacientes : Paciente[];
+  pacientes = signal<Paciente[]>([]);
   paciente : any = new Paciente;
   tipo : number = 1
+  paginaActual = signal(1);
+  itemsPorPagina = 4;
 
   private detector = inject(PLATFORM_ID)
   private cdr = inject(ChangeDetectorRef)
@@ -28,10 +30,25 @@ export class Pacientes {
 
   private listarP(){
     this.servicioPaciente.obtenerPacientes().subscribe(dato => {
-      this.pacientes = dato;
+      this.pacientes.set(dato)
       console.log(dato)
       this.cdr.detectChanges();
     })
+  }
+
+  datosPaginados = computed(() => {
+    const inicio = (this.paginaActual() - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    return this.pacientes().slice(inicio, fin);
+  })
+
+  totalPaginas = computed(() => 
+  Math.ceil(this.pacientes().length / this.itemsPorPagina));
+
+  cambiarPagina(nuevaPagina: number) {
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas()) {
+      this.paginaActual.set(nuevaPagina);
+    }
   }
 
   abrirModal(){
